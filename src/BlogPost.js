@@ -31,13 +31,17 @@ class BlogPost extends Component {
     }
 
     render(){
-        return(<label>
-            <a href="./" name="home" onClick={this.clickHandle.bind(this)}>Back to Home</a>
+        return(
+            <div>
+                <a href="./" name="home" onClick={this.clickHandle.bind(this)}>Back to Home</a>
+
                 <h2>{this.state.title}</h2>
                 <p id="author">by {this.state.author}</p>
                 <p>Content: {this.state.text}</p>
-                <button value={this.state.id} name={"edit " + this.state.id} onClick={this.onClicked}>Edit</button>
-            </label>);
+                <form>
+                    <button value={this.state.id} name={"edit " + this.state.id} onClick={this.onClicked}>Edit</button>
+                </form>
+            </div>);
     }
 }
 

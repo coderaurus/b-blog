@@ -12,10 +12,10 @@ class EditPost extends Component {
             url : 'http://localhost:8080/blogposts/'+ props.id +'/',
             points: "",
             comments: [],
-            onSuccess: props.onEditSuccess
+            editSuccess: false
         };
 
-        // this.onSuccess = props.onEditSuccess;
+        this.onSuccess = props.onEditSuccess;
         this.onCancel = props.onEditCancel;
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -62,16 +62,7 @@ class EditPost extends Component {
             fetch(this.state.url, { method: 'PUT',
                                     body: body,
                                     headers: header})
-                .then(edited => {
-                    console.log('this is ' + this.toString());
-                    if(edited.status === 200){
-                        console.log('Success:', edited);
-                        let site = 'blog ' + this.state.id;
-                        console.log('Back to: ' + site);
-                        alert("Blog edited successfully.");
-                        this.state.onSuccess();
-                    }
-                }).catch(error => console.error('Error:', error));
+                .then(edited => {console.log(edited)}).catch(error => console.error('Error:', error));
         }
     }
 
