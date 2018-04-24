@@ -11,7 +11,7 @@ class BlogList extends Component {
             let list = [];
             for(let blog of blogs) {
                 list.push( <li key={blog.id}>
-                                <a id={blog.id} onClick={props.listClicked} href={"blogs/" + blog.id}>{blog.title} by {blog.author}</a>
+                                <a id={blog.id} onClick={props.listClicked} name={"blogs " + blog.id} href='./'>{blog.title} by {blog.author}</a>
                                 <ul>
                                     <li>"{blog.text.substr(0,30)}..."</li>
                                     {this.hasComments(blog.comments.length)}
