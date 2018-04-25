@@ -13,6 +13,7 @@ class BlogPost extends Component {
             author: ''
         };
 
+        this.deletePost = this.deletePost.bind(this);
         this.onClicked = props.onClicked;
 
         fetch(props.url).then(response => response.json()).then(post => {
@@ -30,6 +31,19 @@ class BlogPost extends Component {
         event.preventDefault();
     }
 
+    deletePost(event){
+        console.log('delete name ' + event.target.name);
+
+        if(window.confirm('Are you sure you want to delete this post?\n' +
+                'If "Yes" you will return to homepage.')) {
+            let url = 'http://localhost:8080/blogposts/' + this.state.id + '/';
+            fetch(url, {method: 'DELETE'})
+                .then(resp => console.log(resp))
+                .catch(error => console.log('Error occured: ' + error));
+            this.onClicked(event);
+        } else { event.preventDefault(); }
+    }
+
     render(){
         return(
             <div>
@@ -39,8 +53,9 @@ class BlogPost extends Component {
                 <p id="author">by {this.state.author}</p>
                 <p>Content: {this.state.text}</p>
                 <form>
-                    <button value={this.state.id} name={"edit " + this.state.id} onClick={this.onClicked}>Edit</button>
+                    <button id='edit' value={this.state.id} name={"edit " + this.state.id} onClick={this.onClicked}>Edit</button>
                 </form>
+                <a onClick={this.deletePost} name={"delete " + this.state.id} href='./'>Delete</a>
             </div>);
     }
 }

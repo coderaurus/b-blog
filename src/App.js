@@ -25,6 +25,8 @@ class App extends Component {
           this.setState({site:site});
       } else if(event.target.name === 'add'){
           this.setState({site:'add'});
+      } else if(event.target.name.includes('delete')) {
+          this.setState({site: 'home'});
       }
   }
 
@@ -50,7 +52,7 @@ class App extends Component {
           return (
               <div>
                   <h2>B-Blog from Team Bumba</h2>
-                  <a name='add' href={'./'} onClick={this.clickHandle.bind(this)}>Make a new Post</a>
+                  <a name='add' href={'./'} onClick={this.clickHandle.bind(this)}>NEW POST</a>
                   <BlogList link='http://localhost:8080/blogposts/' listClicked={this.clickHandle.bind(this)}/>
               </div>
           );
