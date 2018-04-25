@@ -17,7 +17,7 @@ class SearchFilter extends Component {
     }
 
     render(){
-        return(<input id='search' name='search' value={this.state.search} onChange={this.changeHandle} />);
+        return(<input id='search' name='search' placeholder={'Search by author'} value={this.state.search} onChange={this.changeHandle} />);
     }
 }
 

@@ -11,22 +11,38 @@ class BlogList extends Component {
         this.site = props.link;
         this.state = {list:[],
                       filteredList: []};
+        this.listClicked = props.listClicked;
+    }
 
-        fetch(props.link).then(response => response.json()).then(blogs => {
+    componentDidMount(){
+        fetch(this.site).then(response => response.json()).then(blogs => {
             let list = [];
             for(let blog of blogs) {
                 list.push( <li key={blog.id} id={blog.id}>
-                                <a id={blog.id} onClick={props.listClicked} name={"blogs " + blog.id} href='./'>{blog.title}</a>
-                                <span name='author'>{'by: ' + blog.author + ' | '}</span>
-                                <a id={blog.id} onClick={this.deletePost} name={"delete " + blog.id} href='./'>Delete</a>
-                                <ul>
-                                    <li>"{blog.text.substr(0,30)}..."</li>
-                                    {BlogList.hasComments(blog.comments.length)}
-                                </ul>
-                            </li>);
+                    <a id={blog.id} onClick={this.listClicked.bind(this)} name={"blogs " + blog.id} href='./'>{blog.title}</a>
+                    <span name='author'>{'by: ' + blog.author + ' | '}</span>
+                    <a id={blog.id} onClick={this.deletePost} name={"delete " + blog.id} href='./'>Delete</a>
+                    <ul>
+                        <li>"{blog.text.substr(0,30)}..."</li>
+                        {BlogList.hasComments(blog.comments.length)}
+                    </ul>
+                </li>);
             }
-            this.setState({list:list, filteredList:list});
+            this.setState({ list: list,
+                            filteredList: list});
         });
+    }
+
+    handleFilterChange(event) {
+        let update = this.state.list;
+        update = update.filter(function(item){
+            /* li   . . .   span    . . .   'by: ...'
+             * item.props.children[1].props.children.toLowerCase().search(event.target.value.toLowerCase()
+             */
+
+            return item.props.children[1].props.children.toLowerCase().search(event.target.value.toLowerCase()) !== -1;
+        });
+        this.setState({filteredList: update});
     }
 
     deletePost(event){
@@ -57,21 +73,15 @@ class BlogList extends Component {
         }
     }
 
-    handleFilterChange(event) {
-        let update = this.state.list;
-        update = update.filter(function(item){
-            console.log(item);
-            return item.toString().search('.by .+'+ event.target.value.toLowerCase()+'.+') !== 0;
-        });
-        this.setState({filteredList: update});
-    }
-
     render(){
+        let listLen = this.state.filteredList.length;
         return( <div>
                     <div>
-                        <h3>Blogs ({this.state.list.length}):</h3>
-                        <SearchFilter onChange={this.handleFilterChange} />
+                        <h3>Blogs:</h3>
+                        <SearchFilter onChange={this.handleFilterChange} /><br />
+                        <span id={'searchResult'}>{listLen}{listLen <= 1 ? ' result' : ' results'}</span>
                     </div>
+                    {listLen === 0 ? (<p>Loading blogs...</p>):''}
                     <ul>{this.state.filteredList}</ul>
                 </div>);
     }
