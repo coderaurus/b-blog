@@ -51,8 +51,8 @@ class App extends Component {
       if(this.state.site === "home") {
           return (
               <div>
-                  <h2>B-Blog from Team Bumba</h2>
-                  <a name='add' href={'./'} onClick={this.clickHandle.bind(this)}>NEW POST</a>
+                  <h1 className={'col-md-offset-2'}>B-Blog from Team Bumba</h1>
+                  <a role={'button'} className={'btn btn-xs btn-primary col-md-1-8 col-md-offset-7'} name='add' href={'./'} onClick={this.clickHandle.bind(this)}>NEW POST</a>
                   <BlogList link='http://localhost:8080/blogposts/' listClicked={this.clickHandle.bind(this)}/>
               </div>
           );

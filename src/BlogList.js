@@ -17,13 +17,9 @@ class BlogList extends Component {
         fetch(this.site).then(response => response.json()).then(blogs => {
             let list = [];
             for(let blog of blogs) {
-                list.push( <li key={blog.id} id={blog.id}>
+                list.push( <li className={'col-md-10'} key={blog.id} id={blog.id}>
                     <a id={blog.id} onClick={this.listClicked.bind(this)} name={"blogs " + blog.id} href='./'>{blog.title}</a>
-                    <span name='author'>{'by: ' + blog.author}</span>
-                    <ul>
-                        <li>"{blog.text.substr(0,30)}..."</li>
-                        {BlogList.hasComments(blog.comments.length)}
-                    </ul>
+                    <span className='col-md-offset-1 small' name='author'><em>{'by: ' + blog.author}</em></span>
                 </li>);
             }
             this.setState({ list: list,
@@ -37,7 +33,6 @@ class BlogList extends Component {
             /* li   . . .   span    . . .   'by: ...'
              * item.props.children[1].props.children.toLowerCase().search(event.target.value.toLowerCase()
              */
-
             return item.props.children[1].props.children.toLowerCase().search(event.target.value.toLowerCase()) !== -1;
         });
         this.setState({filteredList: update});
@@ -53,14 +48,15 @@ class BlogList extends Component {
 
     render(){
         let listLen = this.state.filteredList.length;
-        return( <div>
-                    <div>
-                        <h3>Blogs:</h3>
-                        <SearchFilter onChange={this.handleFilterChange} /><br />
-                        <span id={'searchResult'}>{listLen}{listLen <= 1 ? ' result' : ' results'}</span>
+        return( <div className={'text-left'}>
+                    <div className={'col-md-5 col-md-offset-4 text-right'}>
+                        <SearchFilter onChange={this.handleFilterChange} />
+                        <span className={'text-small'} id={'searchResult'}>{listLen}{listLen <= 1 ? ' result' : ' results'}</span>
                     </div>
-                    {listLen === 0 ? (<p>Loading blogs...</p>):''}
-                    <ul>{this.state.filteredList}</ul>
+                    <div className={'col-md-8'}>
+                        {listLen === 0 ? (<p className={'col-md-offset-3 text-small'}>Loading blogs...</p>):''}
+                        <ul className="list-unstyled col-md-10 col-md-offset-3 text-center">{this.state.filteredList}</ul>
+                    </div>
                 </div>);
     }
 }

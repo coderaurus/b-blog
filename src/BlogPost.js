@@ -48,14 +48,13 @@ class BlogPost extends Component {
         return(
             <div>
                 <a href="./" name="home" onClick={this.clickHandle.bind(this)}>Back to Home</a>
-
                 <h2>{this.state.title}</h2>
                 <p id="author">by {this.state.author}</p>
                 <p>Content: {this.state.text}</p>
                 <form>
-                    <button id='edit' value={this.state.id} name={"edit " + this.state.id} onClick={this.onClicked}>Edit</button>
+                    <button className={'col-md-1 btn btn-default btn-sm'} id='edit' value={this.state.id} name={"edit " + this.state.id} onClick={this.onClicked}>Edit</button>
                 </form>
-                <a onClick={this.deletePost} name={"delete " + this.state.id} href='./'>Delete</a>
+                <a className={'col-md-1 btn btn-sm btn-danger'} role={'button'} onClick={this.deletePost} name={"delete " + this.state.id} href='./'>Delete</a>
             </div>);
     }
 }

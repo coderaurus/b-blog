@@ -94,17 +94,17 @@ class EditPost extends Component {
                     <form onSubmit={this.handleSubmit} name ={this.state.mode === 'edit' ? 'blog ' + this.state.id : 'add'} >
                         <label>
                             Title:<br/>
-                            <input type="text" name="title" value={this.state.title} onChange={this.handleChange} />
+                            <input className={'col-md-6 form-control'} type="text" name="title" value={this.state.title} onChange={this.handleChange} />
                         </label><br/>
                         <label>
                             Author:<br/>
-                            <input type="text" name="author" value={this.state.author} onChange={this.handleChange} />
+                            <input className={'col-md-6 form-control'} type="text" name="author" value={this.state.author} onChange={this.handleChange} />
                         </label><br/>
                         <label>
                             Text:<br/>
-                            <textarea name="text" value={this.state.text} onChange={this.handleChange} />
+                            <textarea className={'col-md-7 form-control'} rows="4" name="text" value={this.state.text} onChange={this.handleChange} />
                         </label><br/>
-                        <input type="submit" value={this.state.mode === 'edit' ? 'Save' : 'Add'} />
+                        <input className={'col-md-offset-2 btn btn-default'} type="submit" value={this.state.mode === 'edit' ? 'Save' : 'Add'} />
                     </form>
             </div>);
     }
