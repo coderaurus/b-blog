@@ -1,28 +1,31 @@
 import React, {Component} from 'react';
+import SearchFilter from './SearchFilter';
 
 class BlogList extends Component {
     constructor(props){
         super(props);
 
-
         this.deletePost = this.deletePost.bind(this);
+        this.handleFilterChange = this.handleFilterChange.bind(this);
 
         this.site = props.link;
-        this.state = {list:[]};
+        this.state = {list:[],
+                      filteredList: []};
 
         fetch(props.link).then(response => response.json()).then(blogs => {
             let list = [];
             for(let blog of blogs) {
-                list.push( <li key={blog.id}>
-                                <a id={blog.id} onClick={props.listClicked} name={"blogs " + blog.id} href='./'>{blog.title} by {blog.author}</a>
-                                  | <a id={blog.id} onClick={this.deletePost} name={"delete " + blog.id} href='./'>Delete</a>
+                list.push( <li key={blog.id} id={blog.id}>
+                                <a id={blog.id} onClick={props.listClicked} name={"blogs " + blog.id} href='./'>{blog.title}</a>
+                                <span name='author'>{'by: ' + blog.author + ' | '}</span>
+                                <a id={blog.id} onClick={this.deletePost} name={"delete " + blog.id} href='./'>Delete</a>
                                 <ul>
                                     <li>"{blog.text.substr(0,30)}..."</li>
                                     {BlogList.hasComments(blog.comments.length)}
                                 </ul>
                             </li>);
             }
-            this.setState({list:list});
+            this.setState({list:list, filteredList:list});
         });
     }
 
@@ -54,8 +57,23 @@ class BlogList extends Component {
         }
     }
 
+    handleFilterChange(event) {
+        let update = this.state.list;
+        update = update.filter(function(item){
+            console.log(item);
+            return item.toString().search('.by .+'+ event.target.value.toLowerCase()+'.+') !== 0;
+        });
+        this.setState({filteredList: update});
+    }
+
     render(){
-        return(<div><h3>Blogs ({this.state.list.length}):</h3><ul>{this.state.list}</ul></div>);
+        return( <div>
+                    <div>
+                        <h3>Blogs ({this.state.list.length}):</h3>
+                        <SearchFilter onChange={this.handleFilterChange} />
+                    </div>
+                    <ul>{this.state.filteredList}</ul>
+                </div>);
     }
 }
 
