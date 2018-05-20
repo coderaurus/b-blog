@@ -1,6 +1,13 @@
 import React, {Component} from 'react';
 
+/**
+ * Class handles showing a single blog post. User can also delete the post from here.
+ */
 class BlogPost extends Component {
+    /**
+     * Constructor. Initializes states and binds.
+     * @param props
+     */
     constructor(props){
         super(props);
 
@@ -12,6 +19,10 @@ class BlogPost extends Component {
             text: '',
             author: ''
         };
+
+        this.headers = { "Access-Control-Allow-Origin": "http://localhost:3001/",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+            "Access-Control-Allow-Headers": "Content-type, Origin"};
 
         this.deletePost = this.deletePost.bind(this);
         this.onClicked = props.onClicked;
@@ -26,24 +37,37 @@ class BlogPost extends Component {
         });
     }
 
+    /**
+     * Method calls for click handler of parent element.
+     * @param event
+     */
     clickHandle(event){
         this.onClicked(event);
         event.preventDefault();
     }
 
+    /**
+     * Method deletes the blog post. A confirmation of deletion is given to the user.
+     * @param event
+     */
     deletePost(event){
         console.log('delete name ' + event.target.name);
 
         if(window.confirm('Are you sure you want to delete this post?\n' +
                 'If "Yes" you will return to homepage.')) {
-            let url = 'http://localhost:8080/blogposts/' + this.state.id + '/';
-            fetch(url, {method: 'DELETE'})
+            let url = 'http://206.189.15.232:8080/blogposts/' + this.state.id + '/';
+            fetch(url, {headers: this.headers,
+                        method: 'DELETE'})
                 .then(resp => console.log(resp))
                 .catch(error => console.log('Error occured: ' + error));
             this.onClicked(event);
         } else { event.preventDefault(); }
     }
 
+    /**
+     * Method handles rendering.
+     * @returns {*}
+     */
     render(){
         return(
             <div>

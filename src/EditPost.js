@@ -1,22 +1,29 @@
 import React, {Component} from 'react';
 
+/**
+ * Class handles editing and adding a blog post.
+ * User is directed to the edited post after editing or canceling and
+ * to main page after adding a post successfully.
+ */
 class EditPost extends Component {
+    /**
+     * Constructor. Initializes states, urls and bindings.
+     * @param props - properties given by parent element.
+     */
     constructor(props) {
         super(props);
-
-        this.onSuccess = props.onEditSuccess;
-        this.onCancel = props.onEditCancel;
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleClick = props.handleClick;
+        this.submitted = props.onSubmit;
 
+        // Url used for fetch
         let url;
         if(props.mode === 'edit') {
-            url = 'http://localhost:8080/blogposts/'+ props.id +'/';
+            url = 'http://206.189.15.232:8080/blogposts/' + props.id +'/';
         } else {
-            url = 'http://localhost:8080/blogposts/';
+            url = 'http://206.189.15.232:8080/blogposts/';
         }
 
         this.state = {
@@ -27,14 +34,17 @@ class EditPost extends Component {
             author:         "",
             text:           "",
             points:         "",
-            comments:       [],
-            editSuccess:    false
+            comments:       []
         };
 
         console.log('mode = ' + this.state.mode + '(' + props.mode + ')');
         console.log('url = ' + this.state.url);
+        console.log('id = ' + this.state.id);
     }
 
+    /**
+     * Method fills the form if user is editing a blog post.
+     */
     componentDidMount(){
         if(this.state.mode === 'edit'){
             fetch(this.state.url).then(response => response.json()).then(post => {
@@ -47,6 +57,10 @@ class EditPost extends Component {
         }
     }
 
+    /**
+     * Method handles changes in the form.
+     * @param event
+     */
     handleChange(event) {
         switch (event.target.name) {
             case 'title':
@@ -63,6 +77,11 @@ class EditPost extends Component {
         }
     }
 
+    /**
+     * Method handles submitting the form.
+     *
+     * @param event
+     */
     handleSubmit(event) {
         event.preventDefault();
         let method = 'PUT';
@@ -71,7 +90,8 @@ class EditPost extends Component {
             method = 'POST';
         }
 
-        let header = {"Content-type":"application/json"};
+        let header = {  "Content-type":"application/json",
+                        "Access-Control-Allow-Origin": "*"};
         let data = {title: this.state.title,
                     text: this.state.text,
                     author: this.state.author,
@@ -85,13 +105,18 @@ class EditPost extends Component {
         fetch(this.state.url, { method: method,
                                     body: body,
                                     headers: header})
-                .then(edited => {console.log(edited)}).catch(error => console.error('Error:', error));
+                .catch(error => console.error('Error:', error));
+        this.submitted(event);
     }
 
+    /**
+     * Method handles rendering.
+     * @returns {*}
+     */
     render(){
         return( <div>
-                    <a name={this.state.mode === 'edit' ? 'blog ' + this.state.id : 'home'} href='./' onClick={this.onCancel}>Cancel editing</a>
-                    <form onSubmit={this.handleSubmit} name ={this.state.mode === 'edit' ? 'blog ' + this.state.id : 'add'} >
+                    <a name={this.state.mode === 'edit' ? 'blog ' + this.state.id : 'home'} href='./' onClick={this.onCancel}>{this.state.mode=== 'edit' ? 'Cancel editing' : 'Cancel adding'}</a>
+                    <form onSubmit={this.handleSubmit} name={this.state.mode === 'edit' ? 'blog ' + this.state.id : 'home'} >
                         <label>
                             Title:<br/>
                             <input className={'col-md-6 form-control'} type="text" name="title" value={this.state.title} onChange={this.handleChange} />
@@ -104,7 +129,7 @@ class EditPost extends Component {
                             Text:<br/>
                             <textarea className={'col-md-7 form-control'} rows="4" name="text" value={this.state.text} onChange={this.handleChange} />
                         </label><br/>
-                        <input className={'col-md-offset-2 btn btn-default'} type="submit" value={this.state.mode === 'edit' ? 'Save' : 'Add'} />
+                        <input className={'col-md-offset-2 btn btn-default'} type="submit"  name={'blog ' + this.state.id} value={this.state.mode === 'edit' ? 'Save' : 'Add'} />
                     </form>
             </div>);
     }
