@@ -2,6 +2,10 @@
   "name": "b-blog",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://localhost:3001",
+  "devDependencies": {
+    "build-jar": "^1.0.0"
+  },
   "dependencies": {
     "bootstrap": "^3.3.7",
     "jQuery": "^1.7.4",
