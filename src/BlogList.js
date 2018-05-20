@@ -1,7 +1,16 @@
 import React, {Component} from 'react';
 import SearchFilter from './SearchFilter';
 
+/**
+ * Class for listing all the blogs.
+ * Clicking on a blog post opens up the blog.
+ */
 class BlogList extends Component {
+    /**
+     * Constructor. Initializes states and binding.
+     *
+     * @param props - properties given by the main App class
+     */
     constructor(props){
         super(props);
 
@@ -13,6 +22,9 @@ class BlogList extends Component {
         this.listClicked = props.listClicked;
     }
 
+    /**
+     * Method retrieves all the blogs from backend once the component has mounted.
+     */
     componentDidMount(){
         fetch(this.site).then(response => response.json()).then(blogs => {
             let list = [];
@@ -27,17 +39,29 @@ class BlogList extends Component {
         });
     }
 
+    /**
+     * Method handles search filtering.
+     * @param event
+     */
     handleFilterChange(event) {
         let update = this.state.list;
         update = update.filter(function(item){
-            /* li   . . .   span    . . .   'by: ...'
-             * item.props.children[1].props.children.toLowerCase().search(event.target.value.toLowerCase()
+            /* li   . . .   span    . . .           'by: ...'
+             * item.props.children[1].props.children.props.children.toLowerCase().search(event.target.value.toLowerCase()
              */
-            return item.props.children[1].props.children.toLowerCase().search(event.target.value.toLowerCase()) !== -1;
+            let filter = item.props.children[1].props.children.props.children;
+            return filter.toLowerCase().search(event.target.value.toLowerCase()) !== -1;
         });
         this.setState({filteredList: update});
     }
 
+    /**
+     * NO COMMENT HANDLING IMPLEMENTED
+     *
+     * Method returns a list element of amount of comments according to its noun
+     * @param size - how many comments there are
+     * @returns JSX list element
+     */
     static hasComments(size) {
         if(size > 1) {
             return <li className="comments">{size} comments</li>
@@ -46,6 +70,11 @@ class BlogList extends Component {
         }
     }
 
+    /**
+     * Method handles rendering. When application is retrieving data from backend
+     * user is informed of it. Also the amount of blogs is given to user.
+     * @returns {*}
+     */
     render(){
         let listLen = this.state.filteredList.length;
         return( <div className={'text-left'}>

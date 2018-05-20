@@ -13,6 +13,10 @@ class BlogPost extends Component {
             author: ''
         };
 
+        this.headers = { "Access-Control-Allow-Origin": "http://localhost:3001/",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+            "Access-Control-Allow-Headers": "Content-type, Origin"};
+
         this.deletePost = this.deletePost.bind(this);
         this.onClicked = props.onClicked;
 
@@ -36,8 +40,9 @@ class BlogPost extends Component {
 
         if(window.confirm('Are you sure you want to delete this post?\n' +
                 'If "Yes" you will return to homepage.')) {
-            let url = 'http://localhost:8080/blogposts/' + this.state.id + '/';
-            fetch(url, {method: 'DELETE'})
+            let url = 'http://206.189.15.232:8080/blogposts/' + this.state.id + '/';
+            fetch(url, {headers: this.headers,
+                        method: 'DELETE'})
                 .then(resp => console.log(resp))
                 .catch(error => console.log('Error occured: ' + error));
             this.onClicked(event);
