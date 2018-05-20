@@ -1,6 +1,13 @@
 import React, {Component} from 'react';
 
+/**
+ * Class handles showing a single blog post. User can also delete the post from here.
+ */
 class BlogPost extends Component {
+    /**
+     * Constructor. Initializes states and binds.
+     * @param props
+     */
     constructor(props){
         super(props);
 
@@ -30,11 +37,19 @@ class BlogPost extends Component {
         });
     }
 
+    /**
+     * Method calls for click handler of parent element.
+     * @param event
+     */
     clickHandle(event){
         this.onClicked(event);
         event.preventDefault();
     }
 
+    /**
+     * Method deletes the blog post. A confirmation of deletion is given to the user.
+     * @param event
+     */
     deletePost(event){
         console.log('delete name ' + event.target.name);
 
@@ -49,6 +64,10 @@ class BlogPost extends Component {
         } else { event.preventDefault(); }
     }
 
+    /**
+     * Method handles rendering.
+     * @returns {*}
+     */
     render(){
         return(
             <div>
