@@ -1,6 +1,15 @@
 import React, {Component} from 'react';
 
+/**
+ * Class handles editing and adding a blog post.
+ * User is directed to the edited post after editing or canceling and
+ * to main page after adding a post successfully.
+ */
 class EditPost extends Component {
+    /**
+     * Constructor. Initializes states, urls and bindings.
+     * @param props - properties given by parent element.
+     */
     constructor(props) {
         super(props);
 
@@ -33,6 +42,9 @@ class EditPost extends Component {
         console.log('id = ' + this.state.id);
     }
 
+    /**
+     * Method fills the form if user is editing a blog post.
+     */
     componentDidMount(){
         if(this.state.mode === 'edit'){
             fetch(this.state.url).then(response => response.json()).then(post => {
@@ -45,6 +57,10 @@ class EditPost extends Component {
         }
     }
 
+    /**
+     * Method handles changes in the form.
+     * @param event
+     */
     handleChange(event) {
         switch (event.target.name) {
             case 'title':
@@ -61,6 +77,11 @@ class EditPost extends Component {
         }
     }
 
+    /**
+     * Method handles submitting the form.
+     *
+     * @param event
+     */
     handleSubmit(event) {
         event.preventDefault();
         let method = 'PUT';
@@ -88,9 +109,13 @@ class EditPost extends Component {
         this.submitted(event);
     }
 
+    /**
+     * Method handles rendering.
+     * @returns {*}
+     */
     render(){
         return( <div>
-                    <a name={this.state.mode === 'edit' ? 'blog ' + this.state.id : 'home'} href='./' onClick={this.onCancel}>Cancel editing</a>
+                    <a name={this.state.mode === 'edit' ? 'blog ' + this.state.id : 'home'} href='./' onClick={this.onCancel}>{this.state.mode=== 'edit' ? 'Cancel editing' : 'Cancel adding'}</a>
                     <form onSubmit={this.handleSubmit} name={this.state.mode === 'edit' ? 'blog ' + this.state.id : 'home'} >
                         <label>
                             Title:<br/>
